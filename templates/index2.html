@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mumbai Rent Guru</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #eceffc;
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            color: #fff;
+            background-color: var(--primary-color, #3498db);
+            position: relative;
+            overflow: hidden;
+            transition: background-color 0.3s;
+        }
+
+        .btn::before {
+            position: absolute;
+            content: "";
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                var(--primary-color, #3498db),
+                transparent
+            );
+            transform: translateX(-100%);
+            transition: 0.6s;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        .form-input-material {
+            width: 100%;
+            margin-bottom: 10px; /* Reduced margin */
+        }
+
+        .form-input-material label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .form-input-material input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: 'Raleway', sans-serif;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            color: white;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-form h1 {
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
+
+        .login-form .btn {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .login-form .btn-primary {
+            background-color: var(--primary-color, #3498db);
+        }
+
+        .login-form h2 {
+            margin-top: 20px;
+            font-weight: 400;
+        }
+
+        @media (max-width: 600px) {
+            .login-form {
+                padding: 20px;
+            }
+
+            .btn {
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <form class="login-form" action="/predict" method="post">
+        <h2>Mumbai Rent Guru</h2>
+        <div class="form-group form-input-material">
+            <label for="house_type">House Type</label>
+            <select id="house_type" name="house_type" required class="form-control">
+
+                {% for house_type in house_type %}
+
+                <option value="{{ house_type }}">{{ house_type }}</option>
+
+                {% endfor %}
+            </select>
+
+        </div>
+        <div class="form-group form-input-material">
+            <label for="house_size">House Size</label>
+                <select class="form-control" id="house_size" name="house_size" required class="form-control">
+                    {% for house_size in house_size %}
+
+                    <option value="{{ house_size }}">{{ house_size }}</option>
+
+                    {% endfor %}
+                </select>
+                
+        </div>
+        <div class="form-group form-input-material">
+            <label for="location">Location</label>
+                <select class="form-control" id="location" name="location" required>
+                    {% for location in location %}
+
+                    <option value="{{ location }}">{{ location }}</option>
+
+                    {% endfor %}
+                </select>
+                
+        </div>
+        <div class="form-group form-input-material">
+            <label for="numBathrooms">Number of Bathrooms</label>
+            <input type="number" name="numBathrooms" id="numBathrooms" placeholder="Enter number of bathrooms"
+                autocomplete="off" class="form-control" required />
+                
+        </div>
+        <div class="form-group form-input-material">
+            <label for="numBalconies">Number of Balconies</label>
+            <input type="number" name="numBalconies" id="numBalconies" placeholder="Enter number of balconies"
+                autocomplete="off" class="form-control" required />
+        </div>
+        <div class="form-group form-input-material">
+            <label for="verificationDate">Verification Date</label>
+                <select class="form-control" id="verificationDate" name="verificationDate" required>
+                    {% for verificationDate in verificationDate %}
+
+                    <option value="{{ verificationDate}}">{{ verificationDate }}</option>
+
+                    {% endfor %}
+                </select>
+        </div>
+        <div class="form-group form-input-material">
+            <label for="SecurityDeposit">Security Deposit</label>
+            <input type="number" name="SecurityDeposit" id="SecurityDeposit" placeholder="Enter security deposit"
+                autocomplete="off" class="form-control" required />
+        </div>
+        <div class="form-group form-input-material">
+            <label for="Status">Status</label>
+                <select class="form-control" id="Status" name="Status" required>
+                    {% for Status in Status %}
+
+                    <option value="{{ Status }}">{{ Status }}</option>
+
+                    {% endfor %}
+                </select>
+
+        </div>
+        <button type="submit" class="btn btn-primary">Predict</button>
+        <div>
+            <h2>{{ prediction_result }}</h2>
+        </div>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
